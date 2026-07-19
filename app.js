@@ -1,5 +1,5 @@
 const BASE = '/hair-by-barry/';
-const BOOK = 'https://app.anolla.com/account/calendar';
+const BOOK = 'https://anolla.com/book/barry-art-hair';
 let lang = localStorage.getItem('barry-language') === 'en' ? 'en' : 'bg';
 const page = document.body.dataset.page;
 
