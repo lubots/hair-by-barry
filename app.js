@@ -1,10 +1,13 @@
 const BASE = '/hair-by-barry/';
 const BOOK = 'https://anolla.com/book/barry-art-hair';
+const ANOLLA_WIDGET_ID = 'widget-a227ae45-713a-458e-91d1-e571497b8774';
+const ANOLLA_WIDGET_LINK = 'https://anolla.com/link/a227ae45-713a-458e-91d1-e571497b8774';
+const ANOLLA_WIDGET_SCRIPT = 'https://anolla.com/widget/js?token=a227ae45-713a-458e-91d1-e571497b8774';
 let lang = localStorage.getItem('barry-language') === 'en' ? 'en' : 'bg';
 const page = document.body.dataset.page;
 
 const t = (bg, en) => lang === 'bg' ? bg : en;
-const book = () => `<a class="book" href="${BOOK}" target="_blank" rel="noreferrer">${t('Запази час','Book now')} <span>↗</span></a>`;
+const book = () => `<a class="book anolla-book" href="${BOOK}">${t('Запази час','Book now')} <span>↗</span></a>`;
 const icon = name => name === 'instagram'
   ? `<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle class="dot" cx="17.5" cy="6.7" r=".9"/></svg>`
   : name === 'facebook'
@@ -14,7 +17,7 @@ const socials = () => `<div class="socials"><a href="https://instagram.com" aria
 
 function shell(content) {
   const links = [['home','', 'Начало','Home'],['about','about/','За нас','About'],['services','services/','Услуги','Services'],['gallery','gallery/','Галерия','Gallery'],['contact','contact/','Контакти','Contact']];
-  return `<header><a class="brand" href="${BASE}"><img src="assets/BB_luxury_monogram.png"><span>HAIR BY BARRY B</span></a><nav>${links.map(([id,path,b,e])=>`<a class="${page===id?'active':''}" href="${BASE+path}">${t(b,e)}</a>`).join('')}<div class="nav-socials">${socials()}</div><div class="nav-book">${book()}</div></nav><div class="head-actions"><div class="language"><button data-lang="bg" class="${lang==='bg'?'active':''}">BG</button><i>/</i><button data-lang="en" class="${lang==='en'?'active':''}">EN</button></div><a class="book small" href="${BOOK}" target="_blank">${t('Запази','Book')} ↗</a><button class="menu" aria-label="Menu"><span></span><span></span></button></div></header>${content}<footer><div><p class="eyebrow">HAIR BY BARRY B</p><h2>${t('Красотата е в детайла.','Beauty lives in the detail.')}</h2></div><div class="footer-info"><p>${t('София, България · Адрес предстои','Sofia, Bulgaria · Address coming soon')}</p><p>+359 88 000 0000 · hello@hairbybarryb.com</p>${socials()}<p>© 2026 Hair by Barry B</p></div></footer><div class="mobile-book">${book()}</div>`;
+  return `<header><a class="brand" href="${BASE}"><img src="assets/BB_luxury_monogram.png"><span>HAIR BY BARRY B</span></a><nav>${links.map(([id,path,b,e])=>`<a class="${page===id?'active':''}" href="${BASE+path}">${t(b,e)}</a>`).join('')}<div class="nav-socials">${socials()}</div><div class="nav-book">${book()}</div></nav><div class="head-actions"><div class="language"><button data-lang="bg" class="${lang==='bg'?'active':''}">BG</button><i>/</i><button data-lang="en" class="${lang==='en'?'active':''}">EN</button></div><a class="book small anolla-book" href="${BOOK}">${t('Запази','Book')} ↗</a><button class="menu" aria-label="Menu"><span></span><span></span></button></div></header>${content}<footer><div><p class="eyebrow">HAIR BY BARRY B</p><h2>${t('Красотата е в детайла.','Beauty lives in the detail.')}</h2></div><div class="footer-info"><p>${t('София, България · Адрес предстои','Sofia, Bulgaria · Address coming soon')}</p><p>+359 88 000 0000 · hello@hairbybarryb.com</p>${socials()}<p>© 2026 Hair by Barry B</p></div></footer><div class="mobile-book">${book()}</div>`;
 }
 
 function home() { return `<main><section class="hero"><div class="glow"></div><div class="monogram"><div class="half left"><img src="assets/BB_luxury_monogram.png"></div><div class="half right"><img src="assets/BB_luxury_monogram.png"></div></div><div class="hero-copy"><p class="eyebrow">${t('ПЕРСОНАЛНО ХАРАКТЕРНО СТИЛНО','PERSONAL DISTINCTIVE REFINED')}</p><h1>${t('Коса, създадена да бъде запомнена.','Hair designed to be remembered.')}</h1><p>${t('Индивидуален подход, прецизна техника и безкомпромисно отношение към всеки детайл.','An individual approach, precise technique and uncompromising attention to every detail.')}</p><div class="actions">${book()}<a class="text-link" href="${BASE}services/">${t('Разгледай услугите','Explore services')} →</a></div></div></section><section class="intro grid"><p class="number">01 / ${t('ЗА НАС','ABOUT')}</p><div><h2>${t('Майсторство без излишен шум.','Craft, without the noise.')}</h2><p class="lead">${t('Hair by Barry B е място за съвременна красота, спокойствие и истински персонално отношение. Всяка визия започва с разговор и завършва с увереност.','Hair by Barry B is a space for modern beauty, calm and genuinely personal care. Every look begins with a conversation and ends with confidence.')}</p><a class="text-link" href="${BASE}about/">${t('Нашата философия','Our philosophy')} →</a></div></section><section class="services-home"><div class="section-title"><p class="number">02 / ${t('УСЛУГИ','SERVICES')}</p><h2>${t('Подбрани услуги','Signature services')}</h2></div>${[['Дамско подстригване','Women’s cut','45 €'],['Цвят и балеаж','Colour & balayage','95 €'],['Стайлинг','Styling','35 €']].map((x,i)=>`<a class="service-line" href="${BASE}services/"><span>0${i+1}</span><h3>${t(x[0],x[1])}</h3><p>${t('от','from')} ${x[2]}</p><b>↗</b></a>`).join('')}</section><section class="light gallery-home"><div class="section-title"><p class="number">03 / ${t('ГАЛЕРИЯ','GALLERY')}</p><h2>${t('Последни визии','Recent work')}</h2></div><div class="gallery-row">${galleryCards(3)}</div><a class="text-link dark" href="${BASE}gallery/">${t('Виж цялата галерия','View full gallery')} →</a></section>${cta()}</main>`; }
@@ -27,6 +30,27 @@ function services(){return `<main class="inner">${pageHero(t('УСЛУГИ И Ц
 function gallery(){return `<main class="inner">${pageHero(t('ГАЛЕРИЯ','GALLERY'),'Форма. Цвят. Характер.','Shape. Colour. Character.',t('Примерни визуализации, които ще бъдат заменени с реални снимки на работата на Barry.','Placeholder visuals that will be replaced with photographs of Barry’s work.'))}<section class="gallery-grid">${galleryCards()}</section>${cta()}</main>`;}
 function contact(){return `<main class="inner">${pageHero(t('КОНТАКТИ','CONTACT'),'Нека поговорим за косата ти.','Let’s talk about your hair.')}<section class="contact"><div class="contact-main"><p class="number">01 / ${t('ПОСЕТИ НИ','VISIT US')}</p><h2>${t('София, България','Sofia, Bulgaria')}</h2><p>${t('Примерен адрес 12','12 Placeholder Street')}<br>${t('1000 София','1000 Sofia')}</p><a href="tel:+359880000000">+359 88 000 0000</a><a href="mailto:hello@hairbybarryb.com">hello@hairbybarryb.com</a>${socials()}</div><div class="hours"><p class="number">02 / ${t('РАБОТНО ВРЕМЕ','OPENING HOURS')}</p>${[[t('Понеделник','Monday'),t('Почивен ден','Closed')],[t('Вторник — Петък','Tuesday — Friday'),'10:00 — 19:00'],[t('Събота','Saturday'),'10:00 — 18:00'],[t('Неделя','Sunday'),t('Почивен ден','Closed')]].map(x=>`<div><span>${x[0]}</span><b>${x[1]}</b></div>`).join('')}${book()}</div></section><section class="map"><span>HAIR BY BARRY B · SOFIA</span><b>B</b><p>${t('Картата ще бъде добавена след потвърждение на адреса','Map will be added once the address is confirmed')}</p></section></main>`;}
 
-function render(){document.documentElement.lang=lang; document.getElementById('app').innerHTML=shell(({home,about,services,gallery,contact})[page]()); bind();}
-function bind(){document.querySelectorAll('[data-lang]').forEach(b=>b.onclick=()=>{lang=b.dataset.lang;localStorage.setItem('barry-language',lang);render();});const menu=document.querySelector('.menu'),nav=document.querySelector('nav');menu.onclick=()=>{menu.classList.toggle('open');nav.classList.toggle('open');};}
+function loadAnollaWidget(){
+  if(!document.getElementById(ANOLLA_WIDGET_ID)){
+    const anchor=document.createElement('a');
+    anchor.id=ANOLLA_WIDGET_ID;
+    anchor.href=ANOLLA_WIDGET_LINK;
+    anchor.textContent='Резервирай час';
+    anchor.style.cssText='position:fixed;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden';
+    document.body.appendChild(anchor);
+  }
+  if(document.querySelector('script[data-anolla-widget]')) return;
+  const script=document.createElement('script');
+  script.src=ANOLLA_WIDGET_SCRIPT;
+  script.defer=true;
+  script.dataset.anollaWidget='true';
+  document.body.appendChild(script);
+}
+function render(){document.documentElement.lang=lang; document.getElementById('app').innerHTML=shell(({home,about,services,gallery,contact})[page]()); bind(); loadAnollaWidget();}
+function bind(){
+  document.querySelectorAll('[data-lang]').forEach(b=>b.onclick=()=>{lang=b.dataset.lang;localStorage.setItem('barry-language',lang);render();});
+  document.querySelectorAll('.anolla-book').forEach(a=>a.onclick=e=>{const widget=document.getElementById(ANOLLA_WIDGET_ID);if(widget){e.preventDefault();widget.click();}});
+  const menu=document.querySelector('.menu'),nav=document.querySelector('nav');
+  menu.onclick=()=>{menu.classList.toggle('open');nav.classList.toggle('open');};
+}
 render();
