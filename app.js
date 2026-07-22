@@ -501,6 +501,15 @@ function ensureBookingDialog() {
       t('Затвори', 'Close')
     );
 
+    existing.querySelector('.booking-dialog-loading p').textContent =
+      t('Зареждане на резервацията…', 'Loading booking…');
+
+    existing.querySelector('.booking-dialog-fallback').textContent =
+      t('Отвори страницата за резервации', 'Open booking page');
+
+    existing.querySelector('iframe').title =
+      t('Резервиране на час чрез Anolla', 'Book an appointment with Anolla');
+
     return;
   }
 
@@ -565,9 +574,63 @@ function ensureBookingDialog() {
     #booking-dialog iframe {
       display: block;
       width: 100%;
-      height: calc(100% - 64px);
       border: 0;
       background: #fff;
+    }
+
+    .booking-dialog-body {
+      position: relative;
+      height: calc(100% - 64px);
+      background: #fff;
+    }
+
+    .booking-dialog-body iframe {
+      height: 100%;
+    }
+
+    .booking-dialog-loading {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      display: grid;
+      place-content: center;
+      gap: 16px;
+      padding: 32px;
+      background: #0a0908;
+      color: #eee8dc;
+      text-align: center;
+    }
+
+    .booking-dialog-loading[hidden] {
+      display: none;
+    }
+
+    .booking-dialog-spinner {
+      width: 34px;
+      height: 34px;
+      margin: 0 auto;
+      border: 2px solid rgba(217, 180, 95, .25);
+      border-top-color: #d9b45f;
+      border-radius: 50%;
+      animation: booking-spin .8s linear infinite;
+    }
+
+    .booking-dialog-loading p {
+      margin: 0;
+      font: 700 10px Arial, sans-serif;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+
+    .booking-dialog-fallback {
+      color: #d9b45f;
+      font: 700 11px Arial, sans-serif;
+      letter-spacing: .08em;
+      text-underline-offset: 4px;
+    }
+
+    @keyframes booking-spin {
+      to { transform: rotate(360deg); }
     }
 
     @media (max-width: 700px) {
@@ -581,7 +644,7 @@ function ensureBookingDialog() {
         height: 58px;
       }
 
-      #booking-dialog iframe {
+      .booking-dialog-body {
         height: calc(100% - 58px);
       }
     }
@@ -610,11 +673,27 @@ function ensureBookingDialog() {
       </button>
     </div>
 
-    <iframe
-      src="${ANOLLA_WIDGET_LINK}"
-      title="Anolla Booking"
-      allow="payment"
-    ></iframe>
+    <div class="booking-dialog-body">
+      <div class="booking-dialog-loading">
+        <span class="booking-dialog-spinner" aria-hidden="true"></span>
+        <p>${t('Зареждане на резервацията…', 'Loading booking…')}</p>
+        <a
+          class="booking-dialog-fallback"
+          href="${BOOK}"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          ${t('Отвори страницата за резервации', 'Open booking page')}
+        </a>
+      </div>
+
+      <iframe
+        data-src="${ANOLLA_WIDGET_LINK}"
+        title="${t('Резервиране на час чрез Anolla', 'Book an appointment with Anolla')}"
+        allow="payment"
+        referrerpolicy="strict-origin-when-cross-origin"
+      ></iframe>
+    </div>
   `;
 
   dialog
@@ -628,6 +707,21 @@ function ensureBookingDialog() {
   });
 
   document.body.appendChild(dialog);
+}
+
+function loadBookingFrame(dialog) {
+  const frame = dialog.querySelector('iframe');
+  const loading = dialog.querySelector('.booking-dialog-loading');
+
+  if (!frame || frame.src) {
+    return;
+  }
+
+  frame.addEventListener('load', () => {
+    loading.hidden = true;
+  }, { once: true });
+
+  frame.src = frame.dataset.src;
 }
 
 function render() {
@@ -657,6 +751,7 @@ function bind() {
       if (dialog?.showModal) {
         event.preventDefault();
         dialog.showModal();
+        loadBookingFrame(dialog);
       }
     });
   });
