@@ -1,4 +1,4 @@
-const BASE = '/hair-by-barry/';
+const BASE = '/';
 const BOOK = 'https://anolla.com/book/barry-art-hair';
 const ANOLLA_WIDGET_LINK = 'https://anolla.com/link/a227ae45-713a-458e-91d1-e571497b8774';
 
